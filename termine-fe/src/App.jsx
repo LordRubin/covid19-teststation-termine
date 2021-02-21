@@ -139,8 +139,8 @@ function App({ i18n }) {
 
   const TAB = {
     BOOK: "/book",
-    BOOKED: "/booked",
-    SETTINGS: "/settings",
+    //BOOKED: "/booked",
+    //SETTINGS: "/settings",
     LOGIN: "/login",
   };
 

@@ -4,7 +4,7 @@ import { InputRequired } from "./InputRequired";
 
 export const AddressForm = ({ form, disable }) => {
   const { register, errors } = form;
-  if (window.config.formFields.includes("address")) {
+  if (false && window.config.formFields.includes("address")) {
     return (
       <fieldset className="input-group vertical">
         <legend>
