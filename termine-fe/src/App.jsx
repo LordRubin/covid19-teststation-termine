@@ -414,12 +414,14 @@ function App({ i18n }) {
               <Link className="button" to={TAB.BOOK}>
                 <Trans>Book appointments</Trans>
               </Link>
+              /*
               <Link className="button" to={TAB.BOOKED}>
                 <Trans>My appointments</Trans>
               </Link>
               <Link className="button" to={TAB.SETTINGS}>
                 <Trans>Settings</Trans>
               </Link>
+              */
               <div className="flexAlignRight">
                 {loggedInUserName && (
                   <div className="displayInline">
