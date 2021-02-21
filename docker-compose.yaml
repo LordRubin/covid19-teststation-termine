@@ -2,16 +2,19 @@ version: "3.3"
 services:
   ldap:
     image: 389ds/dirsrv:latest
-    ports:
-      - 389:3389
-      - 636:3636
+#    ports:
+#      - 389:3389
+#      - 636:3636
   postgres:
     image: postgres:11
     environment:
-      - POSTGRES_PASSWORD=termine_pw!
-      - POSTGRES_DB=termine
-    ports:
-      - 54321:5432
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    volumes:
+      - ./query-appointments.sh:/usr/local/bin/query-appointments.sh:ro
+      - ./postgres-data:/var/lib/postgresql/data
+ #   ports:
+ #     - 54321:5432
   termine:
     build:
       context: .
@@ -22,13 +25,13 @@ services:
     environment:
       - CLAIM_TIMEOUT_MIN=5
       - DISPLAY_SLOTS_COUNT=150
-      - TERMINE_TIME_ZONE=Europe/Berlin
+      - TERMINE_TIME_ZONE=${TIME_ZONE}
       - DISABLE_AUTH=False
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=termine_pw!
+      - DB_USERNAME=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_HOST=postgres
-      - FRONTEND_CONF_JSON=config/by_env/staging.json
-      - JWT_SECRET_KEY=blablablabla
+      - FRONTEND_CONF_JSON=config/by_env/local.json
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - USE_LDAP=True
       - LDAP_URL=ldap
       - LDAP_SYSTEM_DN=uid=termine,ou=Application,dc=example,dc=com
@@ -40,5 +43,13 @@ services:
       # only needs to be set if non-default
       - LDAP_PORT=3389
       - LDAP_TLS_PORT=3636
-    ports:
-      - 8000:8000
+      - VIRTUAL_HOST=${FQDN}
+      - LETSENCRYPT_HOST=${FQDN}
+      - LETSENCRYPT_EMAIL=${ADMIN_EMAIL}
+    expose:
+      - "8000"
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
